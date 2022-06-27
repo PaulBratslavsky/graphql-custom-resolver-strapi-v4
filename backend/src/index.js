@@ -60,7 +60,7 @@ module.exports = {
         Query: {
           authorsContacts: {
             resolve: async (parent, args, context) => {
-      
+              
               const data = await strapi.services["api::writer.writer"].find({
                 populate: ["articles"],
               });
@@ -75,8 +75,6 @@ module.exports = {
               }));
 
             }
-
-            
           }
         },
       },
