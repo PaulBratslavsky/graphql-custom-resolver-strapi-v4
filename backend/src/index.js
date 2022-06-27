@@ -47,35 +47,56 @@ module.exports = {
           authorsContacts: [AuthorContact]
         }
 
+        type AuthorsArticles {
+          id: ID
+          title: String
+          slug: String
+          description: String
+        }
+
         type AuthorContact {
           id: ID
           name: String
           email: String
-          articles: [Article]
+          articles: [AuthorsArticles]
         }
 
       `,
-      
+
       resolvers: {
         Query: {
           authorsContacts: {
             resolve: async (parent, args, context) => {
-              
-              const data = await strapi.services["api::writer.writer"].find({
-                populate: ["articles"],
-              });
+              const data = await strapi.services["api::writer.writer"].find();
 
-              console.log(data)
-
-              return data.results.map(author => ({
+              return data.results.map((author) => ({
                 id: author.id,
                 name: author.name,
                 email: author.email,
-                articles: author.articles,
               }));
+            },
+          },
+        },
 
-            }
-          }
+        AuthorContact: {
+          articles: {
+            resolve: async (parent, args, context) => {
+              
+              console.log("#############", parent.id, "#############");
+
+              const data = await strapi.services["api::article.article"].find({
+                filters: { author: parent.id },
+              });
+
+              return data.results.map((article) => ({
+                id: article.id,
+                title: article.title,
+                slug: article.slug,
+                description: article.description,
+              }));
+             
+            },
+          },
         },
       },
 
@@ -87,4 +108,3 @@ module.exports = {
     }));
   },
 };
-
