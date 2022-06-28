@@ -108,3 +108,11 @@ module.exports = {
     }));
   },
 };
+
+// why not use populate
+
+// how to extend existing resolver
+
+// service vs entiry service
+
+// more docs
